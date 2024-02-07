@@ -267,7 +267,7 @@ readUserTable' :: TableName -> RowKey -> MVState p (Maybe RowData)
 readUserTable' t k = doPersist $ \p -> readValue p (userDataTable t) (DataKey $ asString k)
 {-# INLINE readUserTable' #-}
 
-readSysTable :: FromJSON v => Typeable v => MVar (DbEnv p) -> DataTable -> Text -> IO (Maybe v)
+readSysTable :: ToJSON v => FromJSON v => Typeable v => MVar (DbEnv p) -> DataTable -> Text -> IO (Maybe v)
 readSysTable e t k = runMVState e $ doPersist $ \p -> readValue p t (DataKey k)
 {-# INLINE readSysTable #-}
 
