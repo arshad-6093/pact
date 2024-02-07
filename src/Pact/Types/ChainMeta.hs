@@ -60,7 +60,7 @@ import qualified Pact.JSON.Encode as J
 -- | Name of "entity", ie confidential counterparty in an encrypted exchange, in privacy-supporting platforms.
 newtype EntityName = EntityName Text
   deriving stock (Eq, Ord, Generic)
-  deriving newtype (Show, NFData, Hashable, Serialize, Default, FromJSON, IsString, AsString, J.Encode)
+  deriving newtype (Show, NFData, Hashable, Serialize, Default, ToJSON, FromJSON, IsString, AsString, J.Encode)
 
 instance Arbitrary EntityName where
   arbitrary = EntityName <$> arbitrary

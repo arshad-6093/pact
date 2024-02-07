@@ -121,6 +121,7 @@ import qualified Crypto.PubKey.ECC.P256 as ECC hiding (scalarToInteger)
 import Crypto.Random.Types
 
 import qualified Pact.JSON.Encode as J
+import qualified Pact.Types.Util as P
 
 import Test.QuickCheck
 import qualified Test.QuickCheck.Gen as Gen
@@ -169,8 +170,12 @@ instance Arbitrary UserSig where
 
 #ifdef CRYPTONITE_ED25519
 type Ed25519PrivateKey = Ed25519.SecretKey
+instance A.ToJSON Ed25519PrivateKey where
+  toJSON = A.String . P.toB16Text . B.convert
 #else
 type Ed25519PrivateKey = Ed25519.PrivateKey
+instance A.ToJSON Ed25519PrivateKey where
+  toJSON = A.String . P.toB16Text . Ed25519.exportPrivate
 #endif
 
 verifyEd25519Sig :: PactHash.Hash -> Ed25519.PublicKey -> Ed25519.Signature -> Either String ()
@@ -489,7 +494,8 @@ instance Serialize Ed25519.PublicKey where
   put s = S.putByteString (B.convert s :: ByteString)
   get = maybe (fail "Invalid ED25519 Public Key") return =<<
         (E.maybeCryptoError . Ed25519.publicKey <$> S.getByteString 32)
-
+instance A.ToJSON Ed25519.PublicKey where
+  toJSON = A.String . P.toB16Text . B.convert
 
 instance Ord Ed25519.SecretKey where
   b <= b' = (B.convert b :: ByteString) <= (B.convert b' :: ByteString)
@@ -497,8 +503,6 @@ instance Serialize Ed25519.SecretKey where
   put s = S.putByteString (B.convert s :: ByteString)
   get = maybe (fail "Invalid ED25519 Private Key") return =<<
         (E.maybeCryptoError . Ed25519.secretKey <$> S.getByteString 32)
-
-
 
 instance Ord Ed25519.Signature where
   b <= b' = (B.convert b :: ByteString) <= (B.convert b' :: ByteString)
@@ -525,6 +529,8 @@ instance Serialize Ed25519.PublicKey where
   put s = S.putByteString (Ed25519.exportPublic s)
   get = maybe (fail "Invalid ED25519 Public Key") return =<<
         (Ed25519.importPublic <$> S.getByteString 32)
+instance A.ToJSON Ed25519.PublicKey where
+  toJSON = A.String . P.toB16Text . Ed25519.exportPublic
 
 instance Eq Ed25519.PrivateKey where
   b == b' = (Ed25519.exportPrivate b) == (Ed25519.exportPrivate b')

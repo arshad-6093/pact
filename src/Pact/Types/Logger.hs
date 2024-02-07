@@ -29,7 +29,7 @@ import Pact.Types.Util
 
 newtype LogName = LogName String
   deriving (Eq,Show,Ord)
-  deriving newtype (FromJSON,Hashable,IsString,AsString)
+  deriving newtype (ToJSON, ToJSONKey, FromJSON,Hashable,IsString,AsString)
 
 data Logger = Logger {
   logName :: LogName,
@@ -58,6 +58,7 @@ data LogRule = LogRule {
   exclude :: Maybe (HS.HashSet String)
   } deriving (Eq,Generic)
 
+instance ToJSON LogRule
 instance FromJSON LogRule
 instance Default LogRule where def = LogRule def def def
 instance Show LogRule where
@@ -68,6 +69,7 @@ instance Show LogRule where
 newtype LogRules = LogRules { logRules :: HM.HashMap LogName LogRule }
   deriving (Eq,Show,Generic)
 
+instance ToJSON LogRules
 instance FromJSON LogRules where
   parseJSON = fmap (LogRules . HM.fromList . map (first (LogName . T.unpack)) . M.toList) . parseJSON
 instance Default LogRules where def = LogRules HM.empty
