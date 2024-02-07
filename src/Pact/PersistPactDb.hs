@@ -235,12 +235,12 @@ rollback = do
   resetTemp
 
 
-getLogs :: forall p k . Domain k RowData -> TxId -> MVState p [TxLog RowData]
+getLogs :: forall p k. Domain k RowData -> TxId -> MVState p [TxLog RowData]
 getLogs d tid = do
     x <- doPersist (\p -> readValue p (tn d) (fromIntegral tid))
     mapM convLog $ fromMaybe [] x
   where
-    tn :: Domain k v -> TxTable
+    tn :: ToJSON v => Domain k v -> TxTable
     tn KeySets    = TxTable keysetsTable
     tn Modules    = TxTable modulesTable
     tn Namespaces = TxTable namespacesTable
