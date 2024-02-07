@@ -250,6 +250,9 @@ instance FromJSON v => FromJSON (TxLog v) where
     <*> o .: "key"
     <*> o .: "value"
 
+instance J.Encode v => ToJSON (TxLog v)  where
+  toJSON = J.toJsonViaEncode
+
 instance Pretty v => Pretty (TxLog v) where
   pretty (TxLog domain key value) = commaBrackets
     [ "table: " <> pretty domain

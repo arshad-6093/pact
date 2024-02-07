@@ -160,6 +160,9 @@ instance J.Encode RowData where
     ]
   {-# INLINE build #-}
 
+instance ToJSON RowData where
+  toJSON = J.toJsonViaEncode
+
 instance FromJSON RowData where
   parseJSON v =
     parseVersioned v <|>

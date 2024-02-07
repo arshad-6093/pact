@@ -87,6 +87,8 @@ instance Pretty UserTableInfo where
     [ "module: " <> pretty mod'
     ]
 
+instance ToJSON UserTableInfo where
+  toJSON = J.toJsonViaEncode
 instance FromJSON UserTableInfo
 
 instance J.Encode UserTableInfo where
