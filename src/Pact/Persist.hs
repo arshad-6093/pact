@@ -132,7 +132,7 @@ data Persister s = Persister {
   ,
   query :: forall k v . (PactDbKey k, FromJSON v, Typeable v) => Table k -> Maybe (KeyQuery k) -> Persist s [(k,v)]
   ,
-  readValue :: forall k v . (PactDbKey k, FromJSON v, Typeable v) => Table k -> k -> Persist s (Maybe v)
+  readValue :: forall k v . (PactDbKey k, ToJSON v, FromJSON v, Typeable v) => Table k -> k -> Persist s (Maybe v)
   ,
   writeValue :: forall k . (PactDbKey k) => Table k -> WriteType -> k -> B.ByteString -> Persist s ()
   ,
