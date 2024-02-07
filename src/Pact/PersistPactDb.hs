@@ -240,7 +240,7 @@ getLogs d tid = do
     x <- doPersist (\p -> readValue p (tn d) (fromIntegral tid))
     mapM convLog $ fromMaybe [] x
   where
-    tn :: ToJSON v => Domain k v -> TxTable
+    tn :: Domain k RowData -> TxTable
     tn KeySets    = TxTable keysetsTable
     tn Modules    = TxTable modulesTable
     tn Namespaces = TxTable namespacesTable

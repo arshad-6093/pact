@@ -74,6 +74,10 @@ instance J.Encode PactValue where
     -- this uses a non-standard alternative JSON encoding for 'ModRef'
   {-# INLINE build #-}
 
+
+instance ToJSON PactValue where
+  toJSON = J.toJsonViaEncode
+
 instance FromJSON PactValue where
   parseJSON v =
     (PLiteral <$> parseJSON v) <|>

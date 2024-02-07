@@ -56,6 +56,9 @@ instance J.Encode a => J.Encode (Namespace a) where
     ]
   {-# INLINABLE build #-}
 
+instance (J.Encode a, Eq a) => ToJSON (Namespace a) where
+  toJSON = J.toJsonViaEncode
+
 instance FromJSON a => FromJSON (Namespace a) where parseJSON = lensyParseJSON 3
 
 instance (NFData a) => NFData (Namespace a)

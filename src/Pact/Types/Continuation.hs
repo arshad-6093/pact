@@ -222,6 +222,9 @@ instance J.Encode PactExec where
     ]
   {-# INLINABLE build #-}
 
+instance ToJSON PactExec where
+  toJSON = J.toJsonViaEncode
+
 instance FromJSON PactExec where
   parseJSON = withObject "PactExec" $ \o ->
     PactExec

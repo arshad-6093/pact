@@ -163,6 +163,9 @@ instance J.Encode KeySet where
     ]
   {-# INLINABLE build #-}
 
+instance ToJSON KeySet where
+  toJSON = J.toJsonViaEncode
+
 -- -------------------------------------------------------------------------- --
 -- KeySetName
 

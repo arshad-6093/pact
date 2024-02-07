@@ -163,6 +163,9 @@ instance (FromJSON r) => FromJSON (ModuleData r) where
       <*> o .: "refMap"
       <*> (HM.fromList <$> (fromMaybe mempty <$> o .:? "dependencies"))
 
+instance (J.Encode r, Eq r) => ToJSON (ModuleData r) where
+  toJSON = J.toJsonViaEncode
+
 instance Arbitrary r => Arbitrary (ModuleData r) where
   arbitrary = ModuleData
     <$> arbitrary
