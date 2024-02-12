@@ -25,7 +25,7 @@
           pact =
             final.haskell-nix.project' {
               src = ./.;
-              compiler-nix-name = "ghc963";
+              compiler-nix-name = "ghc94";
               shell.tools = {
                 cabal = {};
                 haskell-language-server = {};

@@ -203,7 +203,7 @@ library
     , attoparsec >=0.13.0.2
     , asn1-encoding >=0.9.6
     , asn1-types >=0.3.4
-    , base >= 4.18.0.0
+    , base >= 4.17.0.0
     , base16-bytestring >=0.1.1.6
     , base64-bytestring >=1.0.0.1
         -- base64-bytestring >=1.2.0.0 is less lenient then previous versions, which can cause pact failures (e.g. (env-hash "aa"))
@@ -228,7 +228,7 @@ library
     , megaparsec >=9
     , memory
     , mod >=0.1.2
-    , mtl >=2.3
+    , mtl
     , pact-json >=0.1
     , pact-time >=0.2
     , parsers >=0.12.4
