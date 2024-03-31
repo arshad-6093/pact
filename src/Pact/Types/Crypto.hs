@@ -172,24 +172,24 @@ instance Arbitrary UserSig where
 type Ed25519PrivateKey = Ed25519.SecretKey
 instance A.ToJSON Ed25519PrivateKey where
   toJSON = A.String . P.toB16Text . B.convert
-instance FromJSON Ed25519PrivateKey where
-    parseJSON = withText "Ed25519PrivateKey" $ \txt ->
-        case B.convert <$> parseB16TextOnly txt of
-            Left err -> fail $ "Error parsing Ed25519 private key: " ++ err
+instance A.FromJSON Ed25519PrivateKey where
+  parseJSON = A.withText "SecretKey" $ \txt ->
+        case Base64.decode (T.encodeUtf8 txt) of
+            Left err -> fail $ "Error decoding Base64: " ++ err
             Right bs -> case Ed25519.secretKey bs of
-                Left err -> fail $ "Invalid Ed25519 private key: " ++ err
-                Right sk -> return sk
+                E.CryptoFailed err -> fail $ "Invalid Ed25519 secret key: " ++ show err
+                E.CryptoPassed sk -> return sk
 #else
 type Ed25519PrivateKey = Ed25519.PrivateKey
 instance A.ToJSON Ed25519PrivateKey where
   toJSON = A.String . P.toB16Text . Ed25519.exportPrivate
-instance FromJSON Ed25519PrivateKey where
-    parseJSON = withText "Ed25519PrivateKey" $ \txt ->
+instance A.FromJSON Ed25519PrivateKey where
+    parseJSON = A.withText "Ed25519PrivateKey" $ \txt ->
         case B.convert <$> parseB16TextOnly txt of
             Left err -> fail $ "Error parsing Ed25519 private key: " ++ err
             Right bs -> case Ed25519.importPrivate bs of
-                Left err -> fail $ "Invalid Ed25519 private key: " ++ err
-                Right sk -> return sk
+                Nothing -> fail "Invalid Ed25519 private key: "
+                Just pk -> return pk
 #endif
 
 verifyEd25519Sig :: PactHash.Hash -> Ed25519.PublicKey -> Ed25519.Signature -> Either String ()
