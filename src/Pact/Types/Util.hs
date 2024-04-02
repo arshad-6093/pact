@@ -51,6 +51,21 @@ module Pact.Types.Util
   ) where
 
 import Data.Aeson
+    ( Value,
+      FromJSON(parseJSON),
+      FromJSONKeyFunction(FromJSONKeyTextParser),
+      FromJSONKey(fromJSONKey),
+      withText,
+      eitherDecode,
+      Result(..),
+      Zero,
+      GToJSON,
+      Options(fieldLabelModifier),
+      GFromJSON,
+      fromJSON,
+      genericToJSON,
+      genericParseJSON,
+      defaultOptions )
 import Data.Aeson.Types
 import GHC.Generics
 import Data.ByteString (ByteString)

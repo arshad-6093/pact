@@ -85,6 +85,7 @@ import Data.ByteString (ByteString)
 import Data.ByteString.Short (fromShort)
 import qualified Data.ByteString as BS
 import qualified Data.ByteString.Lazy as BSL
+import qualified Data.ByteString.Base16 as B16
 import qualified Data.ByteString.Base64 as Base64
 import qualified Data.ByteString.Base64.URL as Base64URL
 import Data.Proxy
@@ -174,7 +175,7 @@ instance A.ToJSON Ed25519PrivateKey where
   toJSON = A.String . P.toB16Text . B.convert
 instance A.FromJSON Ed25519PrivateKey where
   parseJSON = A.withText "SecretKey" $ \txt ->
-        case Base64.decode (T.encodeUtf8 txt) of
+        case B16.decode (T.encodeUtf8 txt) of
             Left err -> fail $ "Error decoding Base64: " ++ err
             Right bs -> case Ed25519.secretKey bs of
                 E.CryptoFailed err -> fail $ "Invalid Ed25519 secret key: " ++ show err
@@ -185,7 +186,7 @@ instance A.ToJSON Ed25519PrivateKey where
   toJSON = A.String . P.toB16Text . Ed25519.exportPrivate
 instance A.FromJSON Ed25519PrivateKey where
     parseJSON = A.withText "Ed25519PrivateKey" $ \txt ->
-        case B.convert <$> parseB16TextOnly txt of
+        case B16.decode (T.encodeUtf8 txt) of
             Left err -> fail $ "Error parsing Ed25519 private key: " ++ err
             Right bs -> case Ed25519.importPrivate bs of
                 Nothing -> fail "Invalid Ed25519 private key: "
