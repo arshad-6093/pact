@@ -55,7 +55,7 @@ module Pact.Types.Crypto
   , importEd25519KeyPair
 
   , Ed25519KeyPair
-  , Ed25519PrivateKey
+  , Ed25519PrivateKey(..)
   , UserSig(..)
   , WebAuthnPublicKey
   , WebAuthnSignature(..)
