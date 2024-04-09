@@ -135,7 +135,7 @@ data UserSig = ED25519Sig T.Text
   deriving (Eq, Ord, Show, Generic)
   deriving Serialise via WineryVariant UserSig
 
--- instance Serialize UserSig
+instance Serialize UserSig
 
 instance NFData UserSig
 
@@ -576,7 +576,7 @@ data WebAuthnSignature = WebAuthnSignature
   } deriving (Show, Generic, Eq, Ord)
     deriving Serialise via WineryVariant WebAuthnSignature
 
--- instance Serialize WebAuthnSignature
+instance Serialize WebAuthnSignature
 
 instance NFData WebAuthnSignature
 
