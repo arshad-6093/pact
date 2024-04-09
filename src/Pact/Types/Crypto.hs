@@ -16,6 +16,7 @@
 {-# LANGUAGE DataKinds #-}
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE DerivingVia #-}
 
 -- |
 -- Module      :  Pact.Types.Crypto
@@ -68,7 +69,7 @@ module Pact.Types.Crypto
   , signWebauthn
   ) where
 
-
+import Codec.Winery
 import Prelude
 import GHC.Generics
 
@@ -132,8 +133,9 @@ import qualified Test.QuickCheck.Gen as Gen
 data UserSig = ED25519Sig T.Text
              | WebAuthnSig WebAuthnSignature
   deriving (Eq, Ord, Show, Generic)
+  deriving Serialise via WineryVariant UserSig
 
-instance Serialize UserSig
+-- instance Serialize UserSig
 
 instance NFData UserSig
 
@@ -572,8 +574,9 @@ data WebAuthnSignature = WebAuthnSignature
   , authenticatorData :: T.Text
   , signature :: T.Text
   } deriving (Show, Generic, Eq, Ord)
+    deriving Serialise via WineryVariant WebAuthnSignature
 
-instance Serialize WebAuthnSignature
+-- instance Serialize WebAuthnSignature
 
 instance NFData WebAuthnSignature
 

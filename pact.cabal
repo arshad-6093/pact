@@ -255,6 +255,7 @@ library
     , vector-algorithms >=0.7
     , vector-space >=0.10.4
     , yaml
+    , winery
 
   if flag(build-tool)
     cpp-options: -DBUILD_TOOL
