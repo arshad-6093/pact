@@ -17,6 +17,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE TupleSections #-}
+{-# LANGUAGE DerivingVia #-}
 
 {-# OPTIONS_GHC -fno-warn-orphans #-}
 
@@ -62,6 +63,7 @@ module Pact.Types.Command
   , WebAuthnPubKeyPrefixed(..)
   ) where
 
+import Codec.Winery
 import Control.Applicative
 import Control.Lens hiding ((.=), elements)
 import Control.Monad
@@ -500,6 +502,7 @@ requestKeyToB16Text (RequestKey h) = hashToText h
 newtype RequestKey = RequestKey { unRequestKey :: Hash}
   deriving (Eq, Ord, Generic)
   deriving newtype (Serialize, Hashable, ParseText, FromJSON, FromJSONKey, NFData, J.Encode, AsString)
+  deriving Serialise via WineryVariant RequestKey
 
 instance Show RequestKey where
   show (RequestKey rk) = show rk

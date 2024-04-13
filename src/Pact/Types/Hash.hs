@@ -8,6 +8,7 @@
 {-# LANGUAGE DataKinds #-}
 {-# LANGUAGE GADTs #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE DerivingVia #-}
 
 module Pact.Types.Hash
   (
@@ -24,7 +25,7 @@ module Pact.Types.Hash
   , PactHash, pactHash, pactInitialHash, pactHashLength
   ) where
 
-
+import Codec.Winery
 import Control.DeepSeq
 import Data.ByteString (ByteString)
 import Data.ByteString.Short (ShortByteString, fromShort, toShort)
@@ -53,6 +54,9 @@ import qualified Crypto.Hash as Crypto
 -- so other hash values are kosher (such as an ETH sha256, etc).
 newtype Hash = Hash { unHash :: ShortByteString }
   deriving (Eq, Ord, Generic, Hashable, Serialize, SizeOf, LegacyHashable)
+  deriving Serialise via WineryVariant Hash
+
+instance Serialise ShortByteString
 
 instance Arbitrary Hash where
   -- TODO: add generators for other hash types

@@ -8,6 +8,7 @@
 {-# LANGUAGE RecordWildCards #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE DerivingVia #-}
 
 -- |
 -- Module      :  Pact.Types.API
@@ -27,6 +28,7 @@ module Pact.Types.API
   , ListenResponse(..)
   ) where
 
+import Codec.Winery
 import Control.Applicative ((<|>))
 import Control.DeepSeq (NFData)
 import Control.Lens hiding ((.=))
@@ -45,6 +47,7 @@ import qualified Pact.JSON.Legacy.Utils as JL
 
 newtype RequestKeys = RequestKeys { _rkRequestKeys :: NonEmpty RequestKey }
   deriving (Show, Eq, Ord, Generic, NFData)
+  deriving Serialise via WineryVariant RequestKeys
 makeLenses ''RequestKeys
 
 instance FromJSON RequestKeys where
